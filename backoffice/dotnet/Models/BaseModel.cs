@@ -2,20 +2,16 @@
 
 namespace dotnet.Models
 {
-    public class BaseModel
+    public class BaseModel : AggregateRoot
     {
-        public BaseModel()
+        protected BaseModel(string name) : base(Guid.NewGuid(), name)
         {
-            
-        }
-        
-        protected BaseModel(Guid id, string name)
-        {
-            Id = id;
-            Name = name;
+            var now = DateTime.Now;
+            CreatedOn = now;
+            UpdatedOn = now;
         }
 
-        protected Guid Id { get; private set; }
-        protected string Name { get; private set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime UpdatedOn { get; set; }
     }
 }

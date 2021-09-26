@@ -2,7 +2,9 @@
 {
     public enum CategoryType
     {
-        Phone,
-        Tablet
+        TShirt,
+        Shirt,
+        Trousers,
+        Shorts
     }
 }

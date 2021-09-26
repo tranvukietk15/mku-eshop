@@ -11,8 +11,8 @@ using dotnet.Models.Db;
 namespace dotnet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210926084330_Update_Max_Length_To_500")]
-    partial class Update_Max_Length_To_500
+    [Migration("20210926144236_Add brand")]
+    partial class Addbrand
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,20 @@ namespace dotnet.Migrations
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("dotnet.Models.Brand", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brands");
+                });
+
             modelBuilder.Entity("dotnet.Models.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -29,8 +43,8 @@ namespace dotnet.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -50,9 +64,10 @@ namespace dotnet.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(350)
+                        .HasColumnType("nvarchar(350)");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -60,6 +75,21 @@ namespace dotnet.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("dotnet.Models.ProductBrand", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BrandId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProductId", "BrandId");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("ProductBrand");
                 });
 
             modelBuilder.Entity("dotnet.Models.Product", b =>
@@ -73,9 +103,38 @@ namespace dotnet.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("dotnet.Models.ProductBrand", b =>
+                {
+                    b.HasOne("dotnet.Models.Brand", "Brand")
+                        .WithMany("ProductBrands")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dotnet.Models.Product", "Product")
+                        .WithMany("ProductBrands")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("dotnet.Models.Brand", b =>
+                {
+                    b.Navigation("ProductBrands");
+                });
+
             modelBuilder.Entity("dotnet.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("dotnet.Models.Product", b =>
+                {
+                    b.Navigation("ProductBrands");
                 });
 #pragma warning restore 612, 618
         }

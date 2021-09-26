@@ -1,15 +1,18 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using dotnet.Models.Enums;
 
 namespace dotnet.Models
 {
-    public class Product
+    public class Product : BaseModel
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public ProductType Type { get; set; }
+        public Product(string name) : base(name)
+        {
+        }
+        
+        public ProductStatus Status { get; set; }
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
+        public IEnumerable<ProductBrand> ProductBrands { get; set; }
     }
 }

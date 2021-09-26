@@ -1,7 +1,12 @@
-﻿namespace dotnet.Services.IServices
+﻿using System.Threading.Tasks;
+using dotnet.Contracts;
+using dotnet.Models;
+
+namespace dotnet.Services.IServices
 {
-    public class ICategoryService
+    public interface ICategoryService
     {
-        
+        Task<PaginationContract<Category>> GetCategoriesAsync(PagingModel model);
+        Task CreateCategoryAsync(Category model);
     }
 }

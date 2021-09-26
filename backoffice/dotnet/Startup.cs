@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using dotnet.Models;
+using dotnet.Models.Db;
 using dotnet.Services;
 using dotnet.Services.IServices;
 using Microsoft.AspNetCore.Builder;
@@ -50,6 +51,14 @@ namespace dotnet
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (Configuration.GetSection("EnableMigration").Get<bool>())
+            {
+                using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+                }
+            }
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
