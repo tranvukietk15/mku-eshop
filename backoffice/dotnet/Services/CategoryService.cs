@@ -27,6 +27,7 @@ namespace dotnet.Services
             {
                 Items = items,
                 Total = total
+                // các bạn update value của index và size ở đây
             };
         }
         
@@ -35,5 +36,7 @@ namespace dotnet.Services
             _context.Set<Category>().Add(model);
             await _context.SaveChangesAsync().ConfigureAwait(false);
         }
+        
+        // tạo thêm các command như edit, delete, search theo tên ở dưới
     }
 }
